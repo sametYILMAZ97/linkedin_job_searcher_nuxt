@@ -1,17 +1,5 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "nuxt.config.ts",
-      "use": "@nuxtjs/vercel-builder"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/"
-    }
-  ],
   "env": {
     "NUXT_PUBLIC_APP_NAME": "LinkedIn Job Search URL Builder",
     "NUXT_PUBLIC_APP_VERSION": "2.0.0"
