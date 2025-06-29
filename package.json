@@ -1,0 +1,42 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage"
+  },
+  "dependencies": {
+    "@headlessui/vue": "^1.7.23",
+    "@heroicons/vue": "^2.2.0",
+    "@nuxt/eslint": "^1.4.1",
+    "@nuxt/fonts": "^0.11.4",
+    "@nuxt/icon": "^1.15.0",
+    "@nuxt/image": "^1.10.0",
+    "@nuxt/scripts": "^0.11.8",
+    "@nuxt/test-utils": "^3.19.1",
+    "@nuxt/ui": "^3.2.0",
+    "@nuxtjs/color-mode": "^3.5.2",
+    "@nuxtjs/tailwindcss": "^7.0.0-beta.0",
+    "@pinia/nuxt": "^0.11.1",
+    "@tailwindcss/forms": "^0.5.10",
+    "@tailwindcss/postcss": "^4.1.11",
+    "@types/node": "^24.0.7",
+    "@vitest/coverage-v8": "^3.2.4",
+    "@vitest/ui": "^3.2.4",
+    "@vue/test-utils": "^2.4.6",
+    "autoprefixer": "^10.4.21",
+    "happy-dom": "^17.6.3",
+    "nuxt": "^3.17.5",
+    "pinia": "^3.0.3",
+    "vitest": "^3.2.4",
+    "vue": "^3.5.17",
+    "vue-router": "^4.5.1"
+  }
+}
