@@ -9,6 +9,16 @@
 
 A modern, full-featured web application for creating optimized LinkedIn job search URLs with advanced filtering options. This is a complete Nuxt 3 implementation based on the successful Python version, enhanced with modern web technologies and deployed on Vercel.
 
+## 📸 Screenshots
+
+### Complete Application Interface
+![LinkedIn Job Search URL Builder - Complete Interface](https://github.com/sametYILMAZ97/linkedin_job_searcher_nuxt/blob/master/nuxt_screenshot_2.png)
+*The main application interface showing all features: search form, advanced filters, URL generation, and modern dark theme*
+
+### Time Filter Selection Feature
+![Time Filter Selection](https://github.com/sametYILMAZ97/linkedin_job_searcher_nuxt/blob/master/screenshot.png)
+*Advanced time filtering with custom presets - from 30 minutes to several months for precise job hunting*
+
 ## 🌟 Key Features
 
 ### 🔍 **Advanced URL Building**
