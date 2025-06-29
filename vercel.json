@@ -2,7 +2,7 @@
   "version": 2,
   "env": {
     "NUXT_PUBLIC_APP_NAME": "LinkedIn Job Search URL Builder",
-    "NUXT_PUBLIC_APP_VERSION": "2.0.0"
+    "NUXT_PUBLIC_APP_VERSION": "2.0.1"
   },
   "headers": [
     {

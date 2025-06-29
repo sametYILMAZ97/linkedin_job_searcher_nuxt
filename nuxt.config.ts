@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-05-15',
-  devtools: { enabled: true },
+  devtools: { enabled: false },
   modules: [
     '@pinia/nuxt',
     '@nuxtjs/tailwindcss',
@@ -30,7 +30,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       appName: 'LinkedIn Job Search URL Builder',
-      appVersion: '2.0.0'
+      appVersion: '2.0.1',
+      appDescription: 'A tool to generate LinkedIn job search URLs with various filters.'
     }
   }
 })
