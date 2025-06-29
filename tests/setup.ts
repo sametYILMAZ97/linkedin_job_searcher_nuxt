@@ -36,4 +36,25 @@ beforeAll(() => {
 
   // Mock window.open
   window.open = vi.fn()
+
+  // Mock document.execCommand for clipboard fallback
+  document.execCommand = vi.fn().mockReturnValue(true)
+
+  // Mock document.createElement and related DOM methods for clipboard fallback
+  const createElementSpy = vi.spyOn(document, 'createElement')
+  createElementSpy.mockImplementation((tagName: string) => {
+    if (tagName === 'textarea') {
+      return {
+        value: '',
+        style: {},
+        select: vi.fn(),
+        setSelectionRange: vi.fn(),
+        remove: vi.fn()
+      } as any
+    }
+    return document.createElement(tagName)
+  })
+
+  const appendChildSpy = vi.spyOn(document.body, 'appendChild')
+  appendChildSpy.mockImplementation(() => null as any)
 })

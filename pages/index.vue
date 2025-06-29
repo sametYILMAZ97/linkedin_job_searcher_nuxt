@@ -213,28 +213,6 @@
             </div>
             <SearchHistory />
           </div>
-
-          <!-- Quick Actions -->
-          <div class="section-compact">
-            <h3 class="heading-sm mb-4">Quick Actions</h3>
-            <div class="space-y-3">
-              <button
-                @click="jobSearchStore.resetForm"
-                class="btn-secondary w-full justify-center"
-              >
-                <Icon name="heroicons:arrow-path" class="w-4 h-4 mr-2" />
-                Reset Form
-              </button>
-              <button
-                v-if="jobSearchStore.generatedUrl"
-                @click="jobSearchStore.openInLinkedIn()"
-                class="btn-linkedin w-full justify-center"
-              >
-                <Icon name="heroicons:arrow-top-right-on-square" class="w-4 h-4 mr-2" />
-                Open in LinkedIn
-              </button>
-            </div>
-          </div>
         </div>
       </div>
     </main>
