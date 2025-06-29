@@ -20,7 +20,7 @@
                 {{ item.params.keywords || 'Any Keywords' }}
               </h4>
             </div>
-            
+
             <div class="space-y-1">
               <p v-if="item.params.location" class="text-xs text-slate-600 dark:text-slate-400 flex items-center">
                 <Icon name="heroicons:map-pin" class="w-3 h-3 mr-1" />
@@ -31,7 +31,7 @@
               </p>
             </div>
           </div>
-          
+
           <div class="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
             <button
               @click="loadSearch(item)"
@@ -81,7 +81,7 @@ const formatDate = (dateString: string) => {
   if (diffInHours < 1) return 'Just now'
   if (diffInHours < 24) return `${diffInHours}h ago`
   if (diffInHours < 48) return 'Yesterday'
-  
+
   return date.toLocaleDateString()
 }
 

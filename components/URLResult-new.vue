@@ -25,13 +25,13 @@
           class="btn-primary flex-1 justify-center"
           :disabled="isCopying"
         >
-          <Icon 
-            :name="isCopying ? 'heroicons:check' : 'heroicons:clipboard-document'" 
-            class="w-4 h-4 mr-2" 
+          <Icon
+            :name="isCopying ? 'heroicons:check' : 'heroicons:clipboard-document'"
+            class="w-4 h-4 mr-2"
           />
           {{ isCopying ? 'Copied!' : 'Copy URL' }}
         </button>
-        
+
         <button
           @click="openInLinkedIn"
           class="btn-linkedin flex-1 justify-center"
@@ -74,7 +74,7 @@ const isCopying = ref(false)
 // Methods
 const copyToClipboard = async () => {
   isCopying.value = true
-  
+
   try {
     await jobSearchStore.copyToClipboard()
     setTimeout(() => {

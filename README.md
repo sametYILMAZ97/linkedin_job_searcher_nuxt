@@ -360,6 +360,16 @@ workplaceType: ['2']       // Remote only
 
 ## 📝 Changelog
 
+### **v2.1.0** - Enhanced UX & Professional Polish
+- 🎨 Major UI/UX redesign for product-like experience
+- 🌙 Improved dark theme with modern styling
+- 📍 Moved Generate URL button below Advanced Filters for better flow
+- 🔧 Enhanced dropdown selectors for better usability
+- 📱 Improved responsive design and mobile experience
+- 🎯 Refined default settings (100 miles distance, Most Recent sort, On-site & Hybrid)
+- 🛠️ Fixed clipboard functionality and search history persistence
+- 📝 Added comprehensive GitHub repository files (CI/CD, issue templates, etc.)
+
 ### **v2.0.0** - Modern Nuxt Implementation
 - ✨ Complete rewrite in Nuxt 3 + TypeScript
 - 🎨 Modern UI with Tailwind CSS

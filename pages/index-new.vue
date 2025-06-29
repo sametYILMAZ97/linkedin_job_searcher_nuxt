@@ -92,6 +92,27 @@
                 <option :value="100">100 miles</option>
               </select>
             </div>
+
+            <!-- Generate Button -->
+            <div class="pt-4">
+              <button
+                @click="handleGenerateURL"
+                :disabled="jobSearchStore.isLoading"
+                class="btn-primary w-full md:w-auto"
+              >
+                <Icon
+                  v-if="jobSearchStore.isLoading"
+                  name="heroicons:arrow-path"
+                  class="w-5 h-5 mr-2 animate-spin"
+                />
+                <Icon
+                  v-else
+                  name="heroicons:magnifying-glass"
+                  class="w-5 h-5 mr-2"
+                />
+                {{ jobSearchStore.isLoading ? 'Generating...' : 'Generate URL' }}
+              </button>
+            </div>
           </div>
 
           <!-- Advanced Filters -->
@@ -167,27 +188,6 @@
                   <span class="ml-3 text-slate-700 dark:text-slate-300">Hybrid</span>
                 </label>
               </div>
-            </div>
-
-            <!-- Generate Button -->
-            <div class="pt-6 border-t border-slate-200 dark:border-slate-700">
-              <button
-                @click="handleGenerateURL"
-                :disabled="jobSearchStore.isLoading"
-                class="btn-primary w-full"
-              >
-                <Icon
-                  v-if="jobSearchStore.isLoading"
-                  name="heroicons:arrow-path"
-                  class="w-5 h-5 mr-2 animate-spin"
-                />
-                <Icon
-                  v-else
-                  name="heroicons:magnifying-glass"
-                  class="w-5 h-5 mr-2"
-                />
-                {{ jobSearchStore.isLoading ? 'Generating...' : 'Generate LinkedIn URL' }}
-              </button>
             </div>
           </div>
         </div>
@@ -290,7 +290,6 @@ useHead({
 <style scoped>
 .btn-secondary,
 .btn-linkedin {
-  display: flex;
-  align-items: center;
+  @apply flex items-center;
 }
 </style>
