@@ -304,7 +304,12 @@ export const useJobSearchStore = defineStore('jobSearch', () => {
    * Add search to history
    */
   const addToSearchHistory = (params: LinkedInSearchParams, url: string): void => {
-    if (!settings.value.autoSaveHistory) return
+    if (!settings.value.autoSaveHistory) {
+      console.log('Auto-save history is disabled')
+      return
+    }
+
+    console.log('Adding search to history:', params.keywords || 'No keywords')
 
     const historyItem: SearchHistoryItem = {
       id: `history_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
@@ -315,10 +320,12 @@ export const useJobSearchStore = defineStore('jobSearch', () => {
 
     // Add to beginning of array
     searchHistory.value.unshift(historyItem)
+    console.log('History item added. Total items now:', searchHistory.value.length)
 
     // Trim to max items
     if (searchHistory.value.length > settings.value.maxHistoryItems) {
       searchHistory.value = searchHistory.value.slice(0, settings.value.maxHistoryItems)
+      console.log('History trimmed to max items:', settings.value.maxHistoryItems)
     }
 
     saveHistoryToStorage()
@@ -391,9 +398,15 @@ export const useJobSearchStore = defineStore('jobSearch', () => {
   }
 
   /**
-   * Copy URL to clipboard with enhanced feedback
+   * Copy URL to clipboard with enhanced feedback and fallbacks
    */
   const copyToClipboard = async (url?: string): Promise<boolean> => {
+    // Only run on client side
+    if (process.server) {
+      console.warn('Clipboard API cannot be used on server side')
+      return false
+    }
+
     const urlToCopy = url || generatedUrl.value
 
     if (!urlToCopy) {
@@ -402,13 +415,63 @@ export const useJobSearchStore = defineStore('jobSearch', () => {
       return false
     }
 
+    console.log('Attempting to copy URL:', urlToCopy.substring(0, 50) + '...')
+
     try {
-      await navigator.clipboard.writeText(urlToCopy)
-      showNotification('success', 'URL copied to clipboard!', 3000)
-      return true
+      // Modern Clipboard API (preferred)
+      if (navigator.clipboard && window.isSecureContext) {
+        console.log('Using modern Clipboard API')
+        await navigator.clipboard.writeText(urlToCopy)
+        showNotification('success', 'URL copied to clipboard!', 3000)
+        return true
+      } else {
+        console.log('Modern Clipboard API not available, using fallback')
+        console.log('navigator.clipboard:', !!navigator.clipboard)
+        console.log('window.isSecureContext:', window.isSecureContext)
+      }
+
+      // Fallback for older browsers or non-secure contexts
+      return fallbackCopyToClipboard(urlToCopy)
     } catch (err) {
+      console.warn('Clipboard API failed, trying fallback:', err)
+      return fallbackCopyToClipboard(urlToCopy)
+    }
+  }
+
+  /**
+   * Fallback clipboard copy method
+   */
+  const fallbackCopyToClipboard = (text: string): boolean => {
+    try {
+      console.log('Using fallback clipboard method')
+
+      // Create a temporary textarea element
+      const textArea = document.createElement('textarea')
+      textArea.value = text
+      textArea.style.position = 'fixed'
+      textArea.style.left = '-999999px'
+      textArea.style.top = '-999999px'
+      document.body.appendChild(textArea)
+
+      textArea.focus()
+      textArea.select()
+
+      // Try to copy using the older execCommand
+      const successful = document.execCommand('copy')
+      document.body.removeChild(textArea)
+
+      console.log('execCommand copy result:', successful)
+
+      if (successful) {
+        showNotification('success', 'URL copied to clipboard!', 3000)
+        return true
+      } else {
+        throw new Error('execCommand copy failed')
+      }
+    } catch (err) {
+      console.error('Fallback copy failed:', err)
       error.value = 'Failed to copy to clipboard'
-      showNotification('error', 'Failed to copy to clipboard')
+      showNotification('error', 'Failed to copy to clipboard. Please copy the URL manually.', 5000)
       return false
     }
   }
@@ -515,7 +578,9 @@ export const useJobSearchStore = defineStore('jobSearch', () => {
   const saveHistoryToStorage = (): void => {
     if (process.client) {
       try {
+        console.log('Saving search history to localStorage. Items:', searchHistory.value.length)
         localStorage.setItem('linkedin_job_search_history', JSON.stringify(searchHistory.value))
+        console.log('Search history saved successfully')
       } catch (err) {
         console.warn('Failed to save history to storage:', err)
       }
@@ -528,12 +593,19 @@ export const useJobSearchStore = defineStore('jobSearch', () => {
   const loadHistoryFromStorage = (): void => {
     if (process.client) {
       try {
+        console.log('Loading search history from localStorage...')
         const stored = localStorage.getItem('linkedin_job_search_history')
         if (stored) {
-          searchHistory.value = JSON.parse(stored)
+          const parsedHistory = JSON.parse(stored)
+          searchHistory.value = parsedHistory
+          console.log('Search history loaded successfully. Items:', parsedHistory.length)
+        } else {
+          console.log('No search history found in localStorage')
         }
       } catch (err) {
         console.warn('Failed to load history from storage:', err)
+        // Reset to empty array on parse error
+        searchHistory.value = []
       }
     }
   }
@@ -578,6 +650,19 @@ export const useJobSearchStore = defineStore('jobSearch', () => {
   }
 
   /**
+   * Initialize store by loading all data from storage
+   */
+  const initializeStore = (): void => {
+    if (process.client) {
+      console.log('Initializing store and loading data from localStorage...')
+      loadFavoritesFromStorage()
+      loadHistoryFromStorage()
+      loadSettingsFromStorage()
+      console.log('Store initialized. History items loaded:', searchHistory.value.length)
+    }
+  }
+
+  /**
    * Get time filter display name
    */
   const getTimeFilterDisplay = (filterKey: TimeFilterKey): string => {
@@ -598,9 +683,7 @@ export const useJobSearchStore = defineStore('jobSearch', () => {
 
   // Auto-load favorites, history, and settings on store creation
   if (process.client) {
-    loadFavoritesFromStorage()
-    loadHistoryFromStorage()
-    loadSettingsFromStorage()
+    initializeStore()
   }
 
   return {
@@ -644,6 +727,7 @@ export const useJobSearchStore = defineStore('jobSearch', () => {
     saveFavoritesToStorage,
     clearError,
     convertCustomTimeToFilter,
-    getTimeFilterDisplay
+    getTimeFilterDisplay,
+    initializeStore
   }
 })

@@ -401,20 +401,17 @@ const handleSubmit = async () => {
   try {
     await store.generateURL()
 
-    // Auto-copy to clipboard
-    const copied = await store.copyToClipboard()
-    if (copied) {
-      // Show success notification
-      store.showNotification('success', 'URL generated and copied to clipboard!')
-    }
+    // Auto-copy to clipboard (don't show extra notification as store.copyToClipboard already shows one)
+    await store.copyToClipboard()
   } catch (error) {
     console.error('Failed to generate URL:', error)
+    store.error = 'Failed to generate URL. Please try again.'
   }
 }
 
-// Auto-load favorites on mount
+// Auto-load favorites, history, and settings on mount
 onMounted(() => {
-  store.loadFavoritesFromStorage()
+  store.initializeStore()
 })
 </script>
 

@@ -91,11 +91,11 @@ interface LinkedInSearchParams {
 
 const generateURL = async (params: LinkedInSearchParams): Promise<string> => {
   const url = new URL('https://www.linkedin.com/jobs/search/')
-  
+
   if (params.keywords) {
     url.searchParams.set('keywords', params.keywords)
   }
-  
+
   return url.toString()
 }
 
@@ -126,10 +126,10 @@ describe('FeatureName', () => {
     it('should behave correctly', () => {
       // Arrange
       const input = 'test data'
-      
+
       // Act
       const result = functionUnderTest(input)
-      
+
       // Assert
       expect(result).toBe('expected output')
     })
