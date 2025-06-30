@@ -14,7 +14,7 @@
         </span>
         <div class="flex items-center space-x-2">
           <label class="text-slate-600 dark:text-slate-400">Show:</label>
-          <select 
+          <select
             :value="jobSearchStore.historyPagination.itemsPerPage"
             class="text-xs bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded px-2 py-1"
             @change="changeItemsPerPage"
@@ -42,7 +42,7 @@
                   {{ item.params.keywords || 'Any Keywords' }}
                 </h4>
               </div>
-              
+
               <div class="space-y-1">
                 <p v-if="item.params.location" class="text-xs text-slate-600 dark:text-slate-400 flex items-center">
                   <Icon name="heroicons:map-pin" class="w-3 h-3 mr-1" />
@@ -53,7 +53,7 @@
                 </p>
               </div>
             </div>
-            
+
             <div class="flex items-center space-x-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
               <button
                 title="Copy URL"
@@ -115,7 +115,7 @@
               'px-2 py-1 text-xs rounded transition-colors',
               page === jobSearchStore.historyPagination.currentPage
                 ? 'bg-blue-600 text-white'
-                : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'
+                : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700',
             ]"
             @click="jobSearchStore.setHistoryPage(page)"
           >
@@ -159,18 +159,18 @@ const getVisiblePages = computed(() => {
   const currentPage = jobSearchStore.historyPagination.currentPage
   const totalPages = jobSearchStore.totalHistoryPages
   const maxVisible = 5
-  
+
   if (totalPages <= maxVisible) {
     return Array.from({ length: totalPages }, (_, i) => i + 1)
   }
-  
+
   let start = Math.max(1, currentPage - Math.floor(maxVisible / 2))
   const end = Math.min(totalPages, start + maxVisible - 1)
-  
+
   if (end - start + 1 < maxVisible) {
     start = Math.max(1, end - maxVisible + 1)
   }
-  
+
   return Array.from({ length: end - start + 1 }, (_, i) => start + i)
 })
 
@@ -183,7 +183,7 @@ const formatDate = (dateString: string) => {
   if (diffInHours < 1) return 'Just now'
   if (diffInHours < 24) return `${diffInHours}h ago`
   if (diffInHours < 48) return 'Yesterday'
-  
+
   return date.toLocaleDateString()
 }
 

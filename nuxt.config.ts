@@ -11,11 +11,11 @@ export default defineNuxtConfig({
     '@nuxt/fonts',
     '@nuxt/icon',
     '@nuxt/image',
-    '@nuxt/scripts'
+    '@nuxt/scripts',
   ],
   css: ['~/assets/css/main.css'],
   typescript: {
-    strict: true
+    strict: true,
   },
   colorMode: {
     preference: 'dark', // default value of $colorMode.preference
@@ -25,13 +25,13 @@ export default defineNuxtConfig({
     componentName: 'ColorScheme',
     classPrefix: '',
     classSuffix: '',
-    storageKey: 'nuxt-color-mode'
+    storageKey: 'nuxt-color-mode',
   },
   runtimeConfig: {
     public: {
       appName: 'LinkedIn Job Search URL Builder',
       appVersion: '2.0.1',
-      appDescription: 'A tool to generate LinkedIn job search URLs with various filters.'
-    }
-  }
+      appDescription: 'A tool to generate LinkedIn job search URLs with various filters.',
+    },
+  },
 })

@@ -1,0 +1,52 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+.nuxt/
+.output/
+dist/
+
+# Cache directories
+.cache/
+
+# Environment files
+.env
+.env.*
+
+# Lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+
+# Vercel
+.vercel/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Logs
+*.log
+logs/
+
+# Coverage
+coverage/
+
+# Documentation (optional - remove if you want to format docs)
+*.md
+
+# Config files that shouldn't be formatted
+.gitignore
+.eslintrc*
+.stylelintrc*

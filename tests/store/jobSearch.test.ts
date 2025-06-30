@@ -26,7 +26,7 @@ describe('JobSearch Store', () => {
         workplaceType: ['1', '3'], // Updated default to On-site and Hybrid
         currentJobId: '',
         geoId: '',
-        origin: 'JOB_SEARCH_PAGE_JOB_FILTER'
+        origin: 'JOB_SEARCH_PAGE_JOB_FILTER',
       })
     })
 
@@ -146,7 +146,7 @@ describe('JobSearch Store', () => {
         sortBy: 'DD',
         geoId: '103644278',
         currentJobId: '4185657072',
-        origin: 'JOB_SEARCH_PAGE_JOB_FILTER'
+        origin: 'JOB_SEARCH_PAGE_JOB_FILTER',
       }
 
       const url = await store.generateURL(params)

@@ -13,7 +13,7 @@ import type {
   SearchHistoryItem,
   UrlAnalysis,
   AppSettings,
-  UIState
+  UIState,
 } from '~/types/linkedin'
 import { TIME_SECONDS, convertHoursToSeconds } from '~/types/linkedin'
 
@@ -31,7 +31,7 @@ export const useJobSearchStore = defineStore('jobSearch', () => {
     workplaceType: ['1', '3'], // Default to On-site and Hybrid
     currentJobId: '',
     geoId: '',
-    origin: 'JOB_SEARCH_PAGE_JOB_FILTER'
+    origin: 'JOB_SEARCH_PAGE_JOB_FILTER',
   })
 
   const generatedUrl = ref<string>('')
@@ -48,7 +48,7 @@ export const useJobSearchStore = defineStore('jobSearch', () => {
     showAnalytics: true,
     defaultSortBy: 'DD', // Default to Most Recent
     defaultWorkplaceTypes: ['1', '3'], // On-site + Hybrid
-    language: 'en'
+    language: 'en',
   })
 
   const ui = ref<UIState>({
@@ -56,14 +56,14 @@ export const useJobSearchStore = defineStore('jobSearch', () => {
     isAnalyticsOpen: false,
     activeTab: 'form',
     showMobileMenu: false,
-    notification: null
+    notification: null,
   })
 
   // Pagination state for search history
   const historyPagination = ref({
     currentPage: 1,
     itemsPerPage: 5,
-    totalItems: 0
+    totalItems: 0,
   })
 
   // Auto-generation state
@@ -75,7 +75,7 @@ export const useJobSearchStore = defineStore('jobSearch', () => {
     location: true,
     distance: true,
     geoId: true,
-    customHours: true
+    customHours: true,
   })
 
   // Getters
@@ -233,7 +233,7 @@ export const useJobSearchStore = defineStore('jobSearch', () => {
       hasLocationFilter: false,
       hasExperienceFilter: false,
       warnings: [],
-      suggestions: []
+      suggestions: [],
     }
 
     try {
@@ -286,7 +286,6 @@ export const useJobSearchStore = defineStore('jobSearch', () => {
       if (analysis.estimatedResults === 'low') {
         analysis.suggestions?.push('Try reducing filters or broadening keywords for more results')
       }
-
     } catch (error) {
       analysis.isValid = false
       analysis.warnings?.push('Invalid URL format')
@@ -309,7 +308,8 @@ export const useJobSearchStore = defineStore('jobSearch', () => {
         validation.value.location = !fieldValue || (typeof fieldValue === 'string' && fieldValue.length >= 2)
         break
       case 'distance':
-        validation.value.distance = fieldValue === undefined || fieldValue === null || (typeof fieldValue === 'number' && fieldValue > 0)
+        validation.value.distance =
+          fieldValue === undefined || fieldValue === null || (typeof fieldValue === 'number' && fieldValue > 0)
         break
       case 'geoId':
         validation.value.geoId = !fieldValue || (typeof fieldValue === 'string' && /^\d+$/.test(fieldValue))
@@ -334,7 +334,7 @@ export const useJobSearchStore = defineStore('jobSearch', () => {
       workplaceType: ['1', '3'], // Default to On-site and Hybrid
       currentJobId: '',
       geoId: '',
-      origin: 'JOB_SEARCH_PAGE_JOB_FILTER'
+      origin: 'JOB_SEARCH_PAGE_JOB_FILTER',
     }
     generatedUrl.value = ''
     error.value = null
@@ -343,7 +343,7 @@ export const useJobSearchStore = defineStore('jobSearch', () => {
       location: true,
       distance: true,
       geoId: true,
-      customHours: true
+      customHours: true,
     }
   }
 
@@ -365,13 +365,67 @@ export const useJobSearchStore = defineStore('jobSearch', () => {
       addToSearchHistory(form.value, generatedUrl.value)
     }
   }
+  /**
+   * Helper function to compare arrays regardless of order
+   */
+  const arraysEqual = (arr1?: string[], arr2?: string[]): boolean => {
+    if (!arr1 && !arr2) return true
+    if (!arr1 || !arr2) return false
+    if (arr1.length !== arr2.length) return false
+
+    const sorted1 = [...arr1].sort()
+    const sorted2 = [...arr2].sort()
+
+    return sorted1.every((val, index) => val === sorted2[index])
+  }
 
   /**
-   * Add search to history
+   * Check if a search already exists in history
+   */
+  const isSearchInHistory = (params: LinkedInSearchParams, url: string): boolean => {
+    return searchHistory.value.some(item => {
+      // First check if the URL exactly matches
+      if (item.url === url) {
+        return true
+      }
+
+      // If URLs don't match, check if the search parameters are essentially the same
+      const itemParams = item.params
+      const currentParams = params
+
+      // Compare primitive values
+      const primitivesMatch =
+        itemParams.keywords === currentParams.keywords &&
+        itemParams.location === currentParams.location &&
+        itemParams.distance === currentParams.distance &&
+        itemParams.timePosted === currentParams.timePosted &&
+        itemParams.customHours === currentParams.customHours &&
+        itemParams.sortBy === currentParams.sortBy &&
+        itemParams.geoId === currentParams.geoId
+
+      // Compare arrays (order-independent)
+      const arraysMatch =
+        arraysEqual(itemParams.experienceLevel, currentParams.experienceLevel) &&
+        arraysEqual(itemParams.jobType, currentParams.jobType) &&
+        arraysEqual(itemParams.workplaceType, currentParams.workplaceType)
+
+      return primitivesMatch && arraysMatch
+    })
+  }
+
+  /**
+   * Add search to history (with duplicate prevention)
    */
   const addToSearchHistory = (params: LinkedInSearchParams, url: string): void => {
     if (!settings.value.autoSaveHistory) {
       console.log('Auto-save history is disabled')
+      return
+    }
+
+    // Check if this search already exists in history
+    if (isSearchInHistory(params, url)) {
+      console.log('Search already exists in history, skipping duplicate:', params.keywords || 'No keywords')
+      showNotification('info', 'This search is already in your history', 2000)
       return
     }
 
@@ -381,7 +435,7 @@ export const useJobSearchStore = defineStore('jobSearch', () => {
       id: `history_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       params: { ...params },
       searchedAt: new Date().toISOString(),
-      url
+      url,
     }
 
     // Add to beginning of array
@@ -471,7 +525,7 @@ export const useJobSearchStore = defineStore('jobSearch', () => {
       show: true,
       type,
       message,
-      duration
+      duration,
     }
 
     // Auto-hide the notification after the specified duration
@@ -521,18 +575,22 @@ export const useJobSearchStore = defineStore('jobSearch', () => {
 
     try {
       // Check if we're in a test environment with mocked navigator.clipboard
-      if (typeof navigator !== 'undefined' && navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+      if (
+        typeof navigator !== 'undefined' &&
+        navigator.clipboard &&
+        typeof navigator.clipboard.writeText === 'function'
+      ) {
         // In test environment, navigator.clipboard.writeText might be mocked
         try {
           console.log('Using modern Clipboard API')
           await navigator.clipboard.writeText(urlToCopy)
           showNotification('success', 'URL copied to clipboard!', 3000)
-          
+
           // Add to history only if copying the current generated URL (not from history)
           if (!url && urlToCopy === generatedUrl.value && settings.value.autoSaveHistory) {
             addToSearchHistory(form.value, urlToCopy)
           }
-          
+
           return true
         } catch (clipboardError) {
           console.warn('Clipboard API failed:', clipboardError)
@@ -546,22 +604,22 @@ export const useJobSearchStore = defineStore('jobSearch', () => {
 
       // Fallback for older browsers or non-secure contexts
       const result = fallbackCopyToClipboard(urlToCopy)
-      
+
       // Add to history only if copying the current generated URL and fallback succeeded
       if (result && !url && urlToCopy === generatedUrl.value && settings.value.autoSaveHistory) {
         addToSearchHistory(form.value, urlToCopy)
       }
-      
+
       return result
     } catch (err) {
       console.warn('Clipboard API failed, trying fallback:', err)
       const result = fallbackCopyToClipboard(urlToCopy)
-      
+
       // Add to history only if copying the current generated URL and fallback succeeded
       if (result && !url && urlToCopy === generatedUrl.value && settings.value.autoSaveHistory) {
         addToSearchHistory(form.value, urlToCopy)
       }
-      
+
       return result
     }
   }
@@ -628,7 +686,7 @@ export const useJobSearchStore = defineStore('jobSearch', () => {
 
     window.open(urlToOpen, '_blank', 'noopener,noreferrer')
     showNotification('info', 'Opening LinkedIn in new tab...', 2000)
-    
+
     // Add to history only if opening the current generated URL (not from history)
     if (!url && urlToOpen === generatedUrl.value && settings.value.autoSaveHistory) {
       addToSearchHistory(form.value, urlToOpen)
@@ -770,7 +828,7 @@ export const useJobSearchStore = defineStore('jobSearch', () => {
       params: { ...form.value },
       createdAt: new Date().toISOString(),
       description: description?.trim(),
-      tags: tags || []
+      tags: tags || [],
     }
 
     favorites.value.push(favorite)
@@ -812,15 +870,15 @@ export const useJobSearchStore = defineStore('jobSearch', () => {
   const getTimeFilterDisplay = (filterKey: TimeFilterKey): string => {
     const timeFilters = {
       '': 'Any time',
-      'r1800': '30 minutes',
-      'r3600': '1 hour',
-      'r7200': '2 hours',
-      'r14400': '4 hours',
-      'r28800': '8 hours',
-      'r86400': '24 hours',
-      'r259200': '3 days',
-      'r604800': '1 week',
-      'r2592000': '1 month'
+      r1800: '30 minutes',
+      r3600: '1 hour',
+      r7200: '2 hours',
+      r14400: '4 hours',
+      r28800: '8 hours',
+      r86400: '24 hours',
+      r259200: '3 days',
+      r604800: '1 week',
+      r2592000: '1 month',
     }
     return timeFilters[filterKey] || 'Custom'
   }
@@ -858,6 +916,8 @@ export const useJobSearchStore = defineStore('jobSearch', () => {
     validateField,
     resetForm,
     addCurrentSearchToHistory,
+    arraysEqual,
+    isSearchInHistory,
     addToSearchHistory,
     loadFromHistory,
     deleteHistoryItem,
@@ -883,6 +943,6 @@ export const useJobSearchStore = defineStore('jobSearch', () => {
     clearError,
     convertCustomTimeToFilter,
     getTimeFilterDisplay,
-    initializeStore
+    initializeStore,
   }
 })

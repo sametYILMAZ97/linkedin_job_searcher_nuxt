@@ -11,23 +11,23 @@ const localStorageMock = {
 // Mock navigator.clipboard
 const clipboardMock = {
   writeText: vi.fn().mockResolvedValue(undefined),
-  readText: vi.fn().mockResolvedValue('')
+  readText: vi.fn().mockResolvedValue(''),
 }
 
 beforeAll(() => {
   Object.defineProperty(window, 'localStorage', {
-    value: localStorageMock
+    value: localStorageMock,
   })
 
   Object.defineProperty(navigator, 'clipboard', {
     value: clipboardMock,
-    writable: true
+    writable: true,
   })
 
   // Mock process for both global and Nuxt contexts
   const processMock = {
     client: true,
-    env: { NODE_ENV: 'test' }
+    env: { NODE_ENV: 'test' },
   }
 
   // Set global process
@@ -49,7 +49,7 @@ beforeAll(() => {
         style: {},
         select: vi.fn(),
         setSelectionRange: vi.fn(),
-        remove: vi.fn()
+        remove: vi.fn(),
       } as any
     }
     return document.createElement(tagName)

@@ -1,20 +1,12 @@
 <template>
   <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg p-4">
-    <h3 class="font-semibold text-yellow-900 dark:text-yellow-100 mb-3">
-      ⏰ Precision Time Filtering
-    </h3>
+    <h3 class="font-semibold text-yellow-900 dark:text-yellow-100 mb-3">⏰ Precision Time Filtering</h3>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <!-- Time Posted Dropdown -->
       <div>
-        <label class="form-label">
-          Time Posted
-        </label>
-        <select
-          v-model="store.form.timePosted"
-          class="form-select"
-          @change="onTimeFilterChange"
-        >
+        <label class="form-label"> Time Posted </label>
+        <select v-model="store.form.timePosted" class="form-select" @change="onTimeFilterChange">
           <option value="">Any time</option>
           <optgroup label="Ultra Fresh (Minutes/Hours)">
             <option value="r1800">30 minutes (Ultra Fresh!)</option>
@@ -39,16 +31,12 @@
             <option value="custom">Custom Hours...</option>
           </optgroup>
         </select>
-        <p class="text-gray-500 dark:text-gray-400 text-xs mt-1">
-          Choose how recent job postings should be
-        </p>
+        <p class="text-gray-500 dark:text-gray-400 text-xs mt-1">Choose how recent job postings should be</p>
       </div>
 
       <!-- Custom Hours Input (shown when custom is selected) -->
       <div v-if="store.form.timePosted === 'custom' || store.form.customHours">
-        <label class="form-label">
-          Custom Hours
-        </label>
+        <label class="form-label"> Custom Hours </label>
         <div class="relative">
           <input
             v-model.number="store.form.customHours"
@@ -71,7 +59,10 @@
     </div>
 
     <!-- Time Filter Preview -->
-    <div v-if="timeFilterPreview" class="mt-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg p-3">
+    <div
+      v-if="timeFilterPreview"
+      class="mt-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg p-3"
+    >
       <div class="flex items-center justify-between">
         <div>
           <div class="text-sm font-medium text-gray-900 dark:text-white">
@@ -112,7 +103,7 @@ const timeFilterPreview = computed(() => {
     return {
       label: `${store.form.customHours} hours (custom)`,
       value: `r${seconds}`,
-      description: 'Custom time filter'
+      description: 'Custom time filter',
     }
   }
 
@@ -122,15 +113,15 @@ const timeFilterPreview = computed(() => {
       { value: 'r3600', label: '1 hour', description: 'Very recent postings' },
       { value: 'r7200', label: '2 hours', description: 'Fresh postings' },
       { value: 'r14400', label: '4 hours', description: 'Recent postings' },
-      { value: 'r28800', label: '8 hours', description: 'Today\'s postings' },
-      { value: 'r86400', label: '24 hours (1 day)', description: 'Yesterday\'s postings' },
+      { value: 'r28800', label: '8 hours', description: "Today's postings" },
+      { value: 'r86400', label: '24 hours (1 day)', description: "Yesterday's postings" },
       { value: 'r172800', label: '48 hours (2 days)', description: 'Last 2 days' },
       { value: 'r259200', label: '3 days', description: 'Last 3 days' },
-      { value: 'r604800', label: '1 week', description: 'This week\'s postings' },
+      { value: 'r604800', label: '1 week', description: "This week's postings" },
       { value: 'r1209600', label: '2 weeks', description: 'Last 2 weeks' },
-      { value: 'r2592000', label: '1 month', description: 'This month\'s postings' },
+      { value: 'r2592000', label: '1 month', description: "This month's postings" },
       { value: 'r5184000', label: '2 months', description: 'Last 2 months' },
-      { value: 'r7776000', label: '3 months', description: 'Last 3 months' }
+      { value: 'r7776000', label: '3 months', description: 'Last 3 months' },
     ]
 
     return timeFilters.find(filter => filter.value === store.form.timePosted)

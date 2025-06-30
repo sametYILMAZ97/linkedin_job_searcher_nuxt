@@ -7,18 +7,11 @@
     leave-from-class="opacity-100 transform translate-y-0"
     leave-to-class="opacity-0 transform translate-y-2"
   >
-    <div
-      v-if="jobSearchStore.ui.notification?.show"
-      class="fixed top-4 right-4 z-50 max-w-sm w-full"
-    >
+    <div v-if="jobSearchStore.ui.notification?.show" class="fixed top-4 right-4 z-50 max-w-sm w-full">
       <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-lg p-4">
         <div class="flex items-start">
           <div class="flex-shrink-0">
-            <Icon
-              :name="getIconName()"
-              :class="getIconClass()"
-              class="w-5 h-5"
-            />
+            <Icon :name="getIconName()" :class="getIconClass()" class="w-5 h-5" />
           </div>
           <div class="ml-3 flex-1">
             <p class="text-sm font-medium text-slate-900 dark:text-slate-100">

@@ -1,8 +1,6 @@
 <template>
   <div>
-    <label class="form-label">
-      Experience Level
-    </label>
+    <label class="form-label"> Experience Level </label>
     <div class="relative">
       <button
         type="button"
@@ -35,7 +33,7 @@
               type="checkbox"
               :value="option.value"
               class="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 dark:bg-gray-700"
-            >
+            />
             <span class="ml-3 text-sm text-gray-900 dark:text-white">
               {{ option.label }}
             </span>
@@ -73,7 +71,7 @@ const experienceLevelOptions = [
   { value: '3', label: 'Associate', description: '1-3 years' },
   { value: '4', label: 'Mid-Senior level', description: '3-8 years' },
   { value: '5', label: 'Director', description: '8+ years' },
-  { value: '6', label: 'Executive', description: 'C-level' }
+  { value: '6', label: 'Executive', description: 'C-level' },
 ]
 
 const selectedText = computed(() => {
@@ -94,7 +92,7 @@ const clearSelection = () => {
 
 // Close dropdown when clicking outside
 onMounted(() => {
-  document.addEventListener('click', (event) => {
+  document.addEventListener('click', event => {
     const target = event.target as HTMLElement
     if (!target.closest('.relative')) {
       isOpen.value = false

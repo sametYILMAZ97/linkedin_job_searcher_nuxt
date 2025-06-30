@@ -114,15 +114,15 @@ export interface JobSearchStore {
 // LinkedIn URL Parameter Mappings
 export const TIME_FILTERS = {
   '': 'Any time',
-  'r1800': '30 minutes',
-  'r3600': '1 hour',
-  'r7200': '2 hours',
-  'r14400': '4 hours',
-  'r28800': '8 hours',
-  'r86400': '24 hours',
-  'r259200': '3 days',
-  'r604800': '1 week',
-  'r2592000': '1 month'
+  r1800: '30 minutes',
+  r3600: '1 hour',
+  r7200: '2 hours',
+  r14400: '4 hours',
+  r28800: '8 hours',
+  r86400: '24 hours',
+  r259200: '3 days',
+  r604800: '1 week',
+  r2592000: '1 month',
 } as const
 
 export const EXPERIENCE_LEVELS = {
@@ -131,23 +131,23 @@ export const EXPERIENCE_LEVELS = {
   '3': 'Associate',
   '4': 'Mid-Senior level',
   '5': 'Director',
-  '6': 'Executive'
+  '6': 'Executive',
 } as const
 
 export const JOB_TYPES = {
-  'F': 'Full-time',
-  'P': 'Part-time',
-  'C': 'Contract',
-  'T': 'Temporary',
-  'I': 'Internship',
-  'V': 'Volunteer',
-  'O': 'Other'
+  F: 'Full-time',
+  P: 'Part-time',
+  C: 'Contract',
+  T: 'Temporary',
+  I: 'Internship',
+  V: 'Volunteer',
+  O: 'Other',
 } as const
 
 export const WORKPLACE_TYPES = {
   '1': 'On-site',
   '2': 'Remote',
-  '3': 'Hybrid'
+  '3': 'Hybrid',
 } as const
 
 export const DISTANCE_OPTIONS = [
@@ -157,7 +157,7 @@ export const DISTANCE_OPTIONS = [
   { value: '25', label: '25 miles' },
   { value: '50', label: '50 miles' },
   { value: '75', label: '75 miles' },
-  { value: '100', label: '100 miles' }
+  { value: '100', label: '100 miles' },
 ] as const
 
 // Time conversion utilities
@@ -166,7 +166,7 @@ export const TIME_SECONDS = {
   HOUR: 3600,
   DAY: 86400,
   WEEK: 604800,
-  MONTH: 2592000
+  MONTH: 2592000,
 } as const
 
 // Quick time filter presets (like Python version)
@@ -179,7 +179,7 @@ export const QUICK_TIME_FILTERS = [
   { label: '24 hours', value: 'r86400', hours: 24 },
   { label: '3 days', value: 'r259200', hours: 72 },
   { label: '1 week', value: 'r604800', hours: 168 },
-  { label: '1 month', value: 'r2592000', hours: 720 }
+  { label: '1 month', value: 'r2592000', hours: 720 },
 ] as const
 
 // Geographic regions for better UX
@@ -197,14 +197,14 @@ export const POPULAR_LOCATIONS = [
   'London, UK',
   'Berlin, Germany',
   'Istanbul, Turkey',
-  'Ankara, Turkey'
+  'Ankara, Turkey',
 ] as const
 
 // LinkedIn URL origins
 export const URL_ORIGINS = {
   JOB_SEARCH: 'JOB_SEARCH_PAGE_JOB_FILTER',
   SEARCH_RESULTS: 'SWITCH_SEARCH_VERTICAL',
-  DIRECT: 'JOBS_HOME_VERTICAL_IN_SEARCH'
+  DIRECT: 'JOBS_HOME_VERTICAL_IN_SEARCH',
 } as const
 
 // Utility functions
@@ -229,4 +229,4 @@ export type TimeFilterKey = keyof typeof TIME_FILTERS
 export type ExperienceLevelKey = keyof typeof EXPERIENCE_LEVELS
 export type JobTypeKey = keyof typeof JOB_TYPES
 export type WorkplaceTypeKey = keyof typeof WORKPLACE_TYPES
-export type QuickTimeFilter = typeof QUICK_TIME_FILTERS[number]
+export type QuickTimeFilter = (typeof QUICK_TIME_FILTERS)[number]

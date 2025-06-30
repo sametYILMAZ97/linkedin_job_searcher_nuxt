@@ -8,36 +8,17 @@
             <div
               class="w-8 h-8 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center"
             >
-              <svg
-                class="w-5 h-5 text-white"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"
-                />
+              <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
               </svg>
             </div>
             <div>
-              <h1 class="text-xl font-bold text-slate-900 dark:text-slate-100">
-                LinkedIn Job Search
-              </h1>
-              <p class="text-sm text-slate-600 dark:text-slate-400">
-                URL Builder Tool
-              </p>
+              <h1 class="text-xl font-bold text-slate-900 dark:text-slate-100">LinkedIn Job Search</h1>
+              <p class="text-sm text-slate-600 dark:text-slate-400">URL Builder Tool</p>
             </div>
           </div>
-          <button
-            @click="toggleDarkMode"
-            class="btn-ghost"
-            aria-label="Toggle theme"
-          >
-            <Icon
-              :name="
-                $colorMode.value === 'dark' ? 'heroicons:sun' : 'heroicons:moon'
-              "
-              class="w-5 h-5"
-            />
+          <button @click="toggleDarkMode" class="btn-ghost" aria-label="Toggle theme">
+            <Icon :name="$colorMode.value === 'dark' ? 'heroicons:sun' : 'heroicons:moon'" class="w-5 h-5" />
           </button>
         </div>
       </div>
@@ -52,9 +33,7 @@
           <div class="section">
             <div class="card-header">
               <h2 class="heading-md">Search Parameters</h2>
-              <p class="text-body mt-1">
-                Configure your LinkedIn job search criteria
-              </p>
+              <p class="text-body mt-1">Configure your LinkedIn job search criteria</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -90,11 +69,7 @@
             <!-- Distance -->
             <div>
               <label for="distance" class="form-label"> Search Radius </label>
-              <select
-                id="distance"
-                v-model.number="jobSearchStore.form.distance"
-                class="form-select"
-              >
+              <select id="distance" v-model.number="jobSearchStore.form.distance" class="form-select">
                 <option :value="5">5 miles</option>
                 <option :value="10">10 miles</option>
                 <option :value="25">25 miles</option>
@@ -108,9 +83,7 @@
           <div class="section">
             <div class="card-header">
               <h3 class="heading-sm">Advanced Filters</h3>
-              <p class="text-body mt-1">
-                Refine your search with additional criteria
-              </p>
+              <p class="text-body mt-1">Refine your search with additional criteria</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -122,11 +95,7 @@
               <!-- Sort By -->
               <div>
                 <label for="sortBy" class="form-label"> Sort Results </label>
-                <select
-                  id="sortBy"
-                  v-model="jobSearchStore.form.sortBy"
-                  class="form-select"
-                >
+                <select id="sortBy" v-model="jobSearchStore.form.sortBy" class="form-select">
                   <option value="DD">Most Recent</option>
                   <option value="R">Most Relevant</option>
                 </select>
@@ -156,9 +125,7 @@
                     v-model="jobSearchStore.form.workplaceType"
                     class="rounded border-slate-300 dark:border-slate-600 text-blue-600 focus:ring-blue-500"
                   />
-                  <span class="ml-3 text-slate-700 dark:text-slate-300"
-                    >On-site</span
-                  >
+                  <span class="ml-3 text-slate-700 dark:text-slate-300">On-site</span>
                 </label>
                 <label class="flex items-center">
                   <input
@@ -167,9 +134,7 @@
                     v-model="jobSearchStore.form.workplaceType"
                     class="rounded border-slate-300 dark:border-slate-600 text-blue-600 focus:ring-blue-500"
                   />
-                  <span class="ml-3 text-slate-700 dark:text-slate-300"
-                    >Remote</span
-                  >
+                  <span class="ml-3 text-slate-700 dark:text-slate-300">Remote</span>
                 </label>
                 <label class="flex items-center">
                   <input
@@ -178,9 +143,7 @@
                     v-model="jobSearchStore.form.workplaceType"
                     class="rounded border-slate-300 dark:border-slate-600 text-blue-600 focus:ring-blue-500"
                   />
-                  <span class="ml-3 text-slate-700 dark:text-slate-300"
-                    >Hybrid</span
-                  >
+                  <span class="ml-3 text-slate-700 dark:text-slate-300">Hybrid</span>
                 </label>
               </div>
             </div>
@@ -218,23 +181,23 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, watch } from "vue";
-import { useJobSearchStore } from "~/stores/jobSearch";
+import { onMounted, watch } from 'vue'
+import { useJobSearchStore } from '~/stores/jobSearch'
 
 // Store
-const jobSearchStore = useJobSearchStore();
+const jobSearchStore = useJobSearchStore()
 
 // Color mode
-const colorMode = useColorMode();
+const colorMode = useColorMode()
 
 const toggleDarkMode = () => {
-  colorMode.preference = colorMode.value === "dark" ? "light" : "dark";
-};
+  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
+}
 
 // Initialize store on mount
 onMounted(() => {
-  jobSearchStore.initializeStore();
-});
+  jobSearchStore.initializeStore()
+})
 
 // Auto-generate URL when form values change
 watch(
@@ -251,27 +214,26 @@ watch(
     jobSearchStore.form.geoId,
   ],
   () => {
-    jobSearchStore.autoGenerateURL();
+    jobSearchStore.autoGenerateURL()
   },
   { deep: true }
-);
+)
 
 // SEO
 useHead({
-  title: "LinkedIn Job Search URL Builder",
+  title: 'LinkedIn Job Search URL Builder',
   meta: [
     {
-      name: "description",
+      name: 'description',
       content:
-        "Generate optimized LinkedIn job search URLs with advanced filtering options. Find your perfect job faster with our professional URL builder tool.",
+        'Generate optimized LinkedIn job search URLs with advanced filtering options. Find your perfect job faster with our professional URL builder tool.',
     },
     {
-      name: "keywords",
-      content:
-        "LinkedIn, job search, URL builder, job filter, career, employment",
+      name: 'keywords',
+      content: 'LinkedIn, job search, URL builder, job filter, career, employment',
     },
   ],
-});
+})
 </script>
 
 <style scoped>

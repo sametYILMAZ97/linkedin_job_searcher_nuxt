@@ -11,10 +11,7 @@
             {{ store.favoriteCount }} saved search{{ store.favoriteCount !== 1 ? 'es' : '' }}
           </p>
         </div>
-        <button
-          class="text-sm text-blue-600 hover:text-blue-800"
-          @click="showManage = !showManage"
-        >
+        <button class="text-sm text-blue-600 hover:text-blue-800" @click="showManage = !showManage">
           {{ showManage ? 'Hide' : 'Manage' }}
         </button>
       </div>
@@ -52,10 +49,7 @@
         </div>
 
         <div v-if="store.favorites.length > 6" class="mt-3 text-center">
-          <button
-            class="text-sm text-blue-600 hover:text-blue-800"
-            @click="showManage = true"
-          >
+          <button class="text-sm text-blue-600 hover:text-blue-800" @click="showManage = true">
             View all {{ store.favorites.length }} favorites →
           </button>
         </div>
@@ -66,16 +60,10 @@
         <div class="flex items-center justify-between mb-4">
           <h3 class="text-sm font-medium text-gray-700">All Saved Searches</h3>
           <div class="flex gap-2">
-            <button
-              class="text-sm text-gray-600 hover:text-gray-800"
-              @click="sortFavorites('name')"
-            >
+            <button class="text-sm text-gray-600 hover:text-gray-800" @click="sortFavorites('name')">
               Sort by Name
             </button>
-            <button
-              class="text-sm text-gray-600 hover:text-gray-800"
-              @click="sortFavorites('date')"
-            >
+            <button class="text-sm text-gray-600 hover:text-gray-800" @click="sortFavorites('date')">
               Sort by Date
             </button>
           </div>
@@ -99,23 +87,30 @@
                 </div>
 
                 <div class="text-sm text-gray-600 space-y-1">
-                  <p v-if="favorite.params.keywords">
-                    <strong>Keywords:</strong> {{ favorite.params.keywords }}
-                  </p>
-                  <p v-if="favorite.params.location">
-                    <strong>Location:</strong> {{ favorite.params.location }}
-                  </p>
+                  <p v-if="favorite.params.keywords"><strong>Keywords:</strong> {{ favorite.params.keywords }}</p>
+                  <p v-if="favorite.params.location"><strong>Location:</strong> {{ favorite.params.location }}</p>
                   <p v-if="favorite.params.timePosted">
                     <strong>Time Filter:</strong> {{ getTimeDisplay(favorite.params.timePosted) }}
                   </p>
                   <div class="flex flex-wrap gap-2 mt-2">
-                    <span v-if="favorite.params.experienceLevel?.length" class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
-                      {{ favorite.params.experienceLevel.length }} experience level{{ favorite.params.experienceLevel.length !== 1 ? 's' : '' }}
+                    <span
+                      v-if="favorite.params.experienceLevel?.length"
+                      class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded"
+                    >
+                      {{ favorite.params.experienceLevel.length }} experience level{{
+                        favorite.params.experienceLevel.length !== 1 ? 's' : ''
+                      }}
                     </span>
-                    <span v-if="favorite.params.jobType?.length" class="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded">
+                    <span
+                      v-if="favorite.params.jobType?.length"
+                      class="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded"
+                    >
                       {{ favorite.params.jobType.length }} job type{{ favorite.params.jobType.length !== 1 ? 's' : '' }}
                     </span>
-                    <span v-if="favorite.params.workplaceType?.length" class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
+                    <span
+                      v-if="favorite.params.workplaceType?.length"
+                      class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded"
+                    >
                       {{ getWorkplaceDisplay(favorite.params.workplaceType) }}
                     </span>
                   </div>
@@ -178,10 +173,7 @@
         >
           Cancel
         </button>
-        <button
-          class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
-          @click="deleteFavorite"
-        >
+        <button class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700" @click="deleteFavorite">
           Delete
         </button>
       </div>
@@ -204,13 +196,12 @@ const sortBy = ref<'name' | 'date'>('date')
 
 // Computed
 const recentFavorites = computed(() => {
-  return [...store.favorites]
-    .sort((a, b) => {
-      // Sort by last used first, then by created date
-      const aDate = a.lastUsed || a.createdAt
-      const bDate = b.lastUsed || b.createdAt
-      return new Date(bDate).getTime() - new Date(aDate).getTime()
-    })
+  return [...store.favorites].sort((a, b) => {
+    // Sort by last used first, then by created date
+    const aDate = a.lastUsed || a.createdAt
+    const bDate = b.lastUsed || b.createdAt
+    return new Date(bDate).getTime() - new Date(aDate).getTime()
+  })
 })
 
 const sortedFavorites = computed(() => {
@@ -282,15 +273,15 @@ const getTimeDisplay = (timePosted?: string): string => {
   if (!timePosted) return 'Any time'
 
   const timeMap: Record<string, string> = {
-    'r1800': '30 minutes',
-    'r3600': '1 hour',
-    'r7200': '2 hours',
-    'r14400': '4 hours',
-    'r28800': '8 hours',
-    'r86400': '24 hours',
-    'r259200': '3 days',
-    'r604800': '1 week',
-    'r2592000': '1 month'
+    r1800: '30 minutes',
+    r3600: '1 hour',
+    r7200: '2 hours',
+    r14400: '4 hours',
+    r28800: '8 hours',
+    r86400: '24 hours',
+    r259200: '3 days',
+    r604800: '1 week',
+    r2592000: '1 month',
   }
 
   return timeMap[timePosted] || timePosted
@@ -302,7 +293,7 @@ const getWorkplaceDisplay = (workplaceTypes?: string[]): string => {
   const workMap: Record<string, string> = {
     '1': 'On-site',
     '2': 'Remote',
-    '3': 'Hybrid'
+    '3': 'Hybrid',
   }
 
   return workplaceTypes.map(type => workMap[type] || type).join(', ')

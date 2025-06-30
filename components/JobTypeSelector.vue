@@ -1,8 +1,6 @@
 <template>
   <div>
-    <label class="form-label">
-      Job Type
-    </label>
+    <label class="form-label"> Job Type </label>
     <div class="relative">
       <button
         type="button"
@@ -35,7 +33,7 @@
               type="checkbox"
               :value="option.value"
               class="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 dark:bg-gray-700"
-            >
+            />
             <span class="ml-3 text-sm text-gray-900 dark:text-white">
               {{ option.label }}
             </span>
@@ -57,9 +55,7 @@
       </div>
     </div>
 
-    <p class="text-gray-500 dark:text-gray-400 text-xs mt-1">
-      Select the types of employment you're interested in
-    </p>
+    <p class="text-gray-500 dark:text-gray-400 text-xs mt-1">Select the types of employment you're interested in</p>
   </div>
 </template>
 
@@ -74,7 +70,7 @@ const jobTypeOptions = [
   { value: 'T', label: 'Temporary', description: 'Short-term' },
   { value: 'I', label: 'Internship', description: 'Learning opportunity' },
   { value: 'V', label: 'Volunteer', description: 'Unpaid work' },
-  { value: 'O', label: 'Other', description: 'Alternative arrangements' }
+  { value: 'O', label: 'Other', description: 'Alternative arrangements' },
 ]
 
 const selectedText = computed(() => {
@@ -95,7 +91,7 @@ const clearSelection = () => {
 
 // Close dropdown when clicking outside
 onMounted(() => {
-  document.addEventListener('click', (event) => {
+  document.addEventListener('click', event => {
     const target = event.target as HTMLElement
     if (!target.closest('.relative')) {
       isOpen.value = false
