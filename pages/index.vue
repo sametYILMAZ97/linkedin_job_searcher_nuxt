@@ -184,31 +184,6 @@
                 </label>
               </div>
             </div>
-
-            <!-- Generate Button -->
-            <div class="pt-6 border-t border-slate-200 dark:border-slate-700">
-              <button
-                @click="handleGenerateURL"
-                :disabled="jobSearchStore.isLoading"
-                class="btn-primary w-full"
-              >
-                <Icon
-                  v-if="jobSearchStore.isLoading"
-                  name="heroicons:arrow-path"
-                  class="w-5 h-5 mr-2 animate-spin"
-                />
-                <Icon
-                  v-else
-                  name="heroicons:magnifying-glass"
-                  class="w-5 h-5 mr-2"
-                />
-                {{
-                  jobSearchStore.isLoading
-                    ? "Generating..."
-                    : "Generate LinkedIn URL"
-                }}
-              </button>
-            </div>
           </div>
 
           <!-- Sidebar -->
@@ -230,7 +205,7 @@
                   Clear All
                 </button>
               </div>
-              <SearchHistory />
+              <SearchHistoryPaginated />
             </div>
           </div>
         </div>
@@ -243,6 +218,7 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted, watch } from "vue";
 import { useJobSearchStore } from "~/stores/jobSearch";
 
 // Store
@@ -260,14 +236,25 @@ onMounted(() => {
   jobSearchStore.initializeStore();
 });
 
-// URL Generation
-const handleGenerateURL = async () => {
-  try {
-    await jobSearchStore.generateURL();
-  } catch (error) {
-    console.error("Error generating URL:", error);
-  }
-};
+// Auto-generate URL when form values change
+watch(
+  () => [
+    jobSearchStore.form.keywords,
+    jobSearchStore.form.location,
+    jobSearchStore.form.distance,
+    jobSearchStore.form.timePosted,
+    jobSearchStore.form.customHours,
+    jobSearchStore.form.experienceLevel,
+    jobSearchStore.form.jobType,
+    jobSearchStore.form.workplaceType,
+    jobSearchStore.form.sortBy,
+    jobSearchStore.form.geoId,
+  ],
+  () => {
+    jobSearchStore.autoGenerateURL();
+  },
+  { deep: true }
+);
 
 // SEO
 useHead({

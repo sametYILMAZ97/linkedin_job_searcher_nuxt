@@ -59,6 +59,17 @@ export const useJobSearchStore = defineStore('jobSearch', () => {
     notification: null
   })
 
+  // Pagination state for search history
+  const historyPagination = ref({
+    currentPage: 1,
+    itemsPerPage: 5,
+    totalItems: 0
+  })
+
+  // Auto-generation state
+  const autoGenerateEnabled = ref<boolean>(true)
+  const debounceTimeout = ref<NodeJS.Timeout | null>(null)
+
   const validation = ref<FormValidation>({
     keywords: true,
     location: true,
@@ -79,6 +90,25 @@ export const useJobSearchStore = defineStore('jobSearch', () => {
   const hasRecentFavorites = computed(() => {
     const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
     return favorites.value.some((fav: FavoriteSearch) => new Date(fav.createdAt) > oneWeekAgo)
+  })
+
+  // Pagination computed properties
+  const paginatedSearchHistory = computed(() => {
+    const start = (historyPagination.value.currentPage - 1) * historyPagination.value.itemsPerPage
+    const end = start + historyPagination.value.itemsPerPage
+    return searchHistory.value.slice(start, end)
+  })
+
+  const totalHistoryPages = computed(() => {
+    return Math.ceil(searchHistory.value.length / historyPagination.value.itemsPerPage)
+  })
+
+  const hasNextHistoryPage = computed(() => {
+    return historyPagination.value.currentPage < totalHistoryPages.value
+  })
+
+  const hasPrevHistoryPage = computed(() => {
+    return historyPagination.value.currentPage > 1
   })
 
   // Actions
@@ -158,11 +188,6 @@ export const useJobSearchStore = defineStore('jobSearch', () => {
       // Analyze the URL
       urlAnalysis.value = analyzeUrl(newGeneratedUrl, searchParams)
 
-      // Add to search history if enabled
-      if (settings.value.autoSaveHistory) {
-        addToSearchHistory(searchParams, newGeneratedUrl)
-      }
-
       // Simulate API delay for loading state
       await new Promise(resolve => setTimeout(resolve, 300))
 
@@ -173,6 +198,28 @@ export const useJobSearchStore = defineStore('jobSearch', () => {
     } finally {
       isLoading.value = false
     }
+  }
+
+  /**
+   * Auto-generate URL with debouncing
+   */
+  const autoGenerateURL = (): void => {
+    if (!autoGenerateEnabled.value) return
+
+    // Clear existing timeout
+    if (debounceTimeout.value) {
+      clearTimeout(debounceTimeout.value)
+    }
+
+    // Set new timeout for debounced generation
+    debounceTimeout.value = setTimeout(async () => {
+      try {
+        await generateURL()
+      } catch (err) {
+        // Silent fail for auto-generation
+        console.warn('Auto-generation failed:', err)
+      }
+    }, 500) // 500ms debounce delay
   }
 
   /**
@@ -301,6 +348,25 @@ export const useJobSearchStore = defineStore('jobSearch', () => {
   }
 
   /**
+   * Add current search to history (manual action)
+   */
+  const addCurrentSearchToHistory = (): void => {
+    if (!settings.value.autoSaveHistory) {
+      console.log('Auto-save history is disabled')
+      return
+    }
+
+    // Generate URL first if it doesn't exist
+    if (!generatedUrl.value) {
+      generateURL()
+    }
+
+    if (generatedUrl.value) {
+      addToSearchHistory(form.value, generatedUrl.value)
+    }
+  }
+
+  /**
    * Add search to history
    */
   const addToSearchHistory = (params: LinkedInSearchParams, url: string): void => {
@@ -358,7 +424,43 @@ export const useJobSearchStore = defineStore('jobSearch', () => {
    */
   const clearSearchHistory = (): void => {
     searchHistory.value = []
+    historyPagination.value.currentPage = 1
     saveHistoryToStorage()
+  }
+
+  /**
+   * Set history page
+   */
+  const setHistoryPage = (page: number): void => {
+    if (page >= 1 && page <= totalHistoryPages.value) {
+      historyPagination.value.currentPage = page
+    }
+  }
+
+  /**
+   * Go to next history page
+   */
+  const nextHistoryPage = (): void => {
+    if (hasNextHistoryPage.value) {
+      historyPagination.value.currentPage++
+    }
+  }
+
+  /**
+   * Go to previous history page
+   */
+  const prevHistoryPage = (): void => {
+    if (hasPrevHistoryPage.value) {
+      historyPagination.value.currentPage--
+    }
+  }
+
+  /**
+   * Set items per page for history
+   */
+  const setHistoryItemsPerPage = (itemsPerPage: number): void => {
+    historyPagination.value.itemsPerPage = itemsPerPage
+    historyPagination.value.currentPage = 1
   }
 
   /**
@@ -425,6 +527,12 @@ export const useJobSearchStore = defineStore('jobSearch', () => {
           console.log('Using modern Clipboard API')
           await navigator.clipboard.writeText(urlToCopy)
           showNotification('success', 'URL copied to clipboard!', 3000)
+          
+          // Add to history only if copying the current generated URL (not from history)
+          if (!url && urlToCopy === generatedUrl.value && settings.value.autoSaveHistory) {
+            addToSearchHistory(form.value, urlToCopy)
+          }
+          
           return true
         } catch (clipboardError) {
           console.warn('Clipboard API failed:', clipboardError)
@@ -437,10 +545,24 @@ export const useJobSearchStore = defineStore('jobSearch', () => {
       }
 
       // Fallback for older browsers or non-secure contexts
-      return fallbackCopyToClipboard(urlToCopy)
+      const result = fallbackCopyToClipboard(urlToCopy)
+      
+      // Add to history only if copying the current generated URL and fallback succeeded
+      if (result && !url && urlToCopy === generatedUrl.value && settings.value.autoSaveHistory) {
+        addToSearchHistory(form.value, urlToCopy)
+      }
+      
+      return result
     } catch (err) {
       console.warn('Clipboard API failed, trying fallback:', err)
-      return fallbackCopyToClipboard(urlToCopy)
+      const result = fallbackCopyToClipboard(urlToCopy)
+      
+      // Add to history only if copying the current generated URL and fallback succeeded
+      if (result && !url && urlToCopy === generatedUrl.value && settings.value.autoSaveHistory) {
+        addToSearchHistory(form.value, urlToCopy)
+      }
+      
+      return result
     }
   }
 
@@ -506,6 +628,11 @@ export const useJobSearchStore = defineStore('jobSearch', () => {
 
     window.open(urlToOpen, '_blank', 'noopener,noreferrer')
     showNotification('info', 'Opening LinkedIn in new tab...', 2000)
+    
+    // Add to history only if opening the current generated URL (not from history)
+    if (!url && urlToOpen === generatedUrl.value && settings.value.autoSaveHistory) {
+      addToSearchHistory(form.value, urlToOpen)
+    }
   }
 
   /**
@@ -715,19 +842,30 @@ export const useJobSearchStore = defineStore('jobSearch', () => {
     isLoading,
     error,
     validation,
+    historyPagination,
     // Getters
     isFormValid,
     favoriteCount,
     hasRecentFavorites,
+    paginatedSearchHistory,
+    totalHistoryPages,
+    hasNextHistoryPage,
+    hasPrevHistoryPage,
     // Actions
     generateURL,
+    autoGenerateURL,
     analyzeUrl,
     validateField,
     resetForm,
+    addCurrentSearchToHistory,
     addToSearchHistory,
     loadFromHistory,
     deleteHistoryItem,
     clearSearchHistory,
+    setHistoryPage,
+    nextHistoryPage,
+    prevHistoryPage,
+    setHistoryItemsPerPage,
     showNotification,
     hideNotification,
     updateSettings,
