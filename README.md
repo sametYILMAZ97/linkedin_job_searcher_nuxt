@@ -7,7 +7,7 @@
 ![Vercel Ready](https://img.shields.io/badge/vercel-ready-000000.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
-A modern, full-featured web application for creating optimized LinkedIn job search URLs with advanced filtering options. This is a complete Nuxt 3 implementation based on the successful Python version, enhanced with modern web technologies and deployed on Vercel.
+A modern, full-featured web application for creating optimized LinkedIn job search URLs with advanced filtering options. This is a complete Nuxt 3 implementation based on the successful Python version (https://github.com/sametYILMAZ97/linkedin_job_searcher_nuxt), enhanced with modern web technologies and deployed on Vercel.
 
 ## 📸 Screenshots
 
